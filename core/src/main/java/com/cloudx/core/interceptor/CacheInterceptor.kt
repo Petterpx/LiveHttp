@@ -1,0 +1,21 @@
+package com.cloudx.core.interceptor
+
+import okhttp3.Interceptor
+import okhttp3.Response
+import java.io.IOException
+
+/**
+ * Created by Petterp
+ * on 2020-01-14
+ * Function:
+ */
+class CacheInterceptor : Interceptor {
+    @Throws(IOException::class)
+    override fun intercept(chain: Interceptor.Chain): Response {
+        return chain.proceed(chain.request()).newBuilder()
+            .request(chain.request())
+            .removeHeader("Pragma")
+            .header("Cache-Control", "public, max-age=" + 60)
+            .build()
+    }
+}

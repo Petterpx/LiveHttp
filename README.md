@@ -3,11 +3,10 @@
 
 ### 如何使用？
 
-[！[]（https://jitpack.io/v/people-rmxc/LiveHttp.svg）]（https://jitpack.io/#people-rmxc/LiveHttp）
 
 ##### Gradle
 
-```css
+```groovy
 allprojects {
 		repositories {
 			...
@@ -16,7 +15,7 @@ allprojects {
 	}
 ```
 
-```css
+```groovy
 dependencies {
 	        implementation 'com.github.people-rmxc:LiveHttp:1.0'
 	}

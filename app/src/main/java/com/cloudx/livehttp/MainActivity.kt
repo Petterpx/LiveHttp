@@ -2,14 +2,15 @@ package com.cloudx.livehttp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.android.ktx.toast
 import com.cloudx.core.LiveHttp
+import com.cloudx.core.error.launchHttp
+import com.cloudx.core.utils.block
+import com.cloudx.core.utils.blockIO
+import com.cloudx.core.utils.requestBody
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import java.lang.Exception
-import kotlin.system.measureTimeMillis
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,20 +19,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         btn.setOnClickListener {
             lifecycleScope.launch {
-                async {
-                    toast(LiveHttp.createApi(ApiTest::class.java).getBaidu())
+                launchHttp {
+                    LiveHttp.createApi(ApiTest::class.java)
+                        .login(requestBody {
+                            mapOf("mobile" to "!23", "code" to "!231")
+                        })
+                        .block(blockError =
+                        {
+                            toast(it.m)
+                        }
+                        ) {
+
+                        }
                 }
-
             }
-
-
         }
     }
-
-    suspend fun test() = coroutineScope {
-        LiveHttp.createApi(ApiTest::class.java).getBaidu()
-    }
 }
-
 
 

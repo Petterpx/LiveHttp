@@ -17,33 +17,30 @@ import retrofit2.Retrofit;
  * on 2019-12-21
  * Function:
  */
-public class GsonConverterFactory extends Converter.Factory {
+public class GabonConverterFactory extends Converter.Factory {
 
-    public static GsonConverterFactory create() {
-        return create(new Gson());
-    }
 
-    public static GsonConverterFactory create(Gson gson) {
+    public static GabonConverterFactory create(Gson gson) {
         if (gson == null) throw new NullPointerException("gson == null");
-        return new GsonConverterFactory(gson);
+        return new GabonConverterFactory(gson);
     }
 
     private final Gson gson;
 
-    private GsonConverterFactory(Gson gson) {
+    private GabonConverterFactory(Gson gson) {
         this.gson = gson;
     }
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
                                                             Retrofit retrofit) {
-        return new GsonResponseBodyConverter<>(gson, type);
+        return new GabonResponseBodyConverter<>(gson, type);
     }
 
     @Override
     public Converter<?, RequestBody> requestBodyConverter(Type type,
                                                           Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-        return new GsonResponseBodyConverter<>(gson, type);
+        return new GabonResponseBodyConverter<>(gson, type);
     }
 
 

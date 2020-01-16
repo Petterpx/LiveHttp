@@ -1,5 +1,6 @@
 package com.cloudx.core.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
@@ -17,8 +18,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
  */
 object LiveConfig {
     val config = Config()
-    val mGson = Gson()
-    val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
 
     class Config {
         lateinit var mContext: Context
@@ -27,6 +26,9 @@ object LiveConfig {
         var mConnectTimeout = 10L
         lateinit var mBaseUrl: String
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
+        val mGson = Gson()
+        val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
+//        var dowloadName=mContext.opPackageName
     }
 
 
@@ -65,8 +67,13 @@ object LiveConfig {
         return this
     }
 
-    fun listInterCeptor(list: ArrayList<Interceptor>): LiveConfig {
+    fun interCeptors(list: ArrayList<Interceptor>): LiveConfig {
         config.mInterceptorList = list
+        return this
+    }
+
+    fun interCeptor(interceptor: Interceptor):LiveConfig{
+        config.mInterceptorList.add(interceptor)
         return this
     }
 

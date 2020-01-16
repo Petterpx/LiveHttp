@@ -1,10 +1,10 @@
 package com.cloudx.livehttp
 
 import com.cloudx.core.utils.LiveResponse
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import okhttp3.ResponseBody
+import retrofit2.http.*
 
 
 /**
@@ -20,6 +20,22 @@ interface ApiTest {
     @GET("https://wanandroid.com/wxarticle/list/408/1/json")
     suspend fun getWan(): LiveResponse<String>
 
-    @POST("/orgframe/root")
+    @POST("login")
     suspend fun login(@Body body: RequestBody): LiveResponse<Login>
+
+    @Multipart
+    @POST("/upload/head")
+    suspend fun uploadFile(@Part file: MultipartBody.Part): String
+
+    @Multipart
+    @POST("")
+    suspend fun uploadFiles(@Part files: List<MultipartBody.Part>): String
+
+    @Streaming
+    @GET("https://tva1.sinaimg.cn/large/006tNbRwly1gaxcpmvvuxj30n006n3zv.jpg")
+    suspend fun dowload(): ResponseBody
+
+    @Streaming
+    @GET
+    suspend fun dowload(@Url url: String): ResponseBody
 }

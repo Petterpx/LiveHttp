@@ -85,7 +85,4 @@ object LiveHttp {
         return retrofit.create(clazz)
     }
 
-
-
-
 }

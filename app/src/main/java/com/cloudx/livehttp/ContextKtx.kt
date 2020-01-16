@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
  * on 2020-01-14
  * Function:
  */
-object ContextKtx : Application() {
+class ContextKtx : Application() {
 
     override fun onCreate() {
         super.onCreate()

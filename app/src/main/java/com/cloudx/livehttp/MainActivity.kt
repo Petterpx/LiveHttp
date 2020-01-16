@@ -8,6 +8,7 @@ import com.cloudx.core.LiveHttp
 import com.cloudx.core.error.launchHttp
 import com.cloudx.core.utils.block
 import com.cloudx.core.utils.blockIO
+import com.cloudx.core.utils.blockMain
 import com.cloudx.core.utils.requestBody
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
@@ -18,19 +19,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btn.setOnClickListener {
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 launchHttp {
                     LiveHttp.createApi(ApiTest::class.java)
                         .login(requestBody {
                             mapOf("mobile" to "!23", "code" to "!231")
-                        })
-                        .block(blockError =
-                        {
-                            toast(it.m)
-                        }
-                        ) {
-
-                        }
+                        }).blockMain {  }
                 }
             }
         }

@@ -11,7 +11,7 @@ import java.nio.charset.UnsupportedCharsetException
 /**
  * Created by Petterp
  * on 2020-01-13
- * Function:
+ * Function: 日志拦截器
  */
 
 class LogInterceptor : Interceptor {

@@ -57,7 +57,7 @@ object LiveHttp {
         mRetrofit = Retrofit.Builder()
             .baseUrl(liveConfig.mBaseUrl)
             .client(mOkHttpClient)
-            .addConverterFactory(GabonConverterFactory.create(LiveConfig.mGson))
+            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGson))
             .build()
         mApiMaps = HashMap(10)
     }
@@ -80,8 +80,12 @@ object LiveHttp {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(mOkHttpClient)
-            .addConverterFactory(GabonConverterFactory.create(LiveConfig.mGson))
+            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGson))
             .build()
         return retrofit.create(clazz)
     }
+
+
+
+
 }

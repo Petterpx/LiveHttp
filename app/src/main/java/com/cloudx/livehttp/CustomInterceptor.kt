@@ -22,7 +22,7 @@ class ReceivedCookiesInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalResponse = chain.proceed(chain.request())
-        if (!originalResponse.headers("Set-Cookie").isEmpty()) {
+        if (originalResponse.headers("Set-Cookie").isNotEmpty()) {
             val cookiesSet =
                 HashSet(originalResponse.headers("Set-Cookie"))
             putArgSet(LiveConfig.config.mContext, cookiesSet)
@@ -43,11 +43,6 @@ class AddHeaderInterceptor : Interceptor {
         for (cookie in cookieSet) {
             builder.addHeader("Cookie", cookie)
         }
-        //            //添加用户登录认证
-//            String auth = LatterPreference.getInfo(LatterspCreateor.HEADER_AUTH);
-//            if (auth != null) {
-//                builder.addHeader("Authorization", auth);
-//            }
         val userToken: String = getArg(LiveConfig.config.mContext)
         if (userToken.isNotEmpty()) {
             builder.addHeader("token", getArg(LiveConfig.config.mContext))

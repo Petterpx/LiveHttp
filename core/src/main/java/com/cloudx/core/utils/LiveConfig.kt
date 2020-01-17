@@ -1,11 +1,10 @@
 package com.cloudx.core.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.ErrorCodeKts
-import com.cloudx.core.interceptor.LogInterceptor
+import com.cloudx.core.interceptor.CustomUrlInterceptor
 import com.cloudx.core.interceptor.RequestInterceptor
 import com.google.gson.Gson
 import okhttp3.Interceptor
@@ -28,7 +27,7 @@ object LiveConfig {
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
         val mGson = Gson()
         val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
-//        var dowloadName=mContext.opPackageName
+//        var dowloadName = mContext.opPackageName
     }
 
 
@@ -38,7 +37,7 @@ object LiveConfig {
     fun initDefault(context: Context, url: String) {
         config.mContext = context
         config.mBaseUrl = url
-        config.mInterceptorList.add(LogInterceptor())
+        config.mInterceptorList.add(CustomUrlInterceptor())
     }
 
     fun baseUrl(url: String): LiveConfig {
@@ -72,7 +71,7 @@ object LiveConfig {
         return this
     }
 
-    fun interCeptor(interceptor: Interceptor):LiveConfig{
+    fun interCeptor(interceptor: Interceptor): LiveConfig {
         config.mInterceptorList.add(interceptor)
         return this
     }

@@ -1,12 +1,21 @@
+@file:Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+
 package com.cloudx.core.utils
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
+import android.telephony.mbms.FileInfo
+import com.cloudx.core.download.DowloadInfo
+import com.cloudx.core.download.FileLister
 import com.cloudx.core.error.ErrorCodeKts
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -14,10 +23,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
 
 /**
  * Created by Petterp
@@ -64,11 +70,8 @@ suspend inline fun <T> LiveResponse<T>.blockIO(
  * requestBody
  */
 
-fun requestBody(obj: () -> Map<String, String>): RequestBody {
-    val toRequestBody =
-        LiveConfig.config.mGson.toJson(obj()).toRequestBody(LiveConfig.config.mediaType)
-    return toRequestBody
-}
+inline fun requestBody(obj: () -> Map<String, String>): RequestBody =
+    LiveConfig.config.mGson.toJson(obj()).toRequestBody(LiveConfig.config.mediaType)
 
 
 /**
@@ -96,15 +99,18 @@ inline fun fileBodys(obj: () -> List<FileBean>): List<MultipartBody.Part> {
 }
 
 
+data class FileDow(var fileName: String, var path: String, var fileType: String = "image/jpg")
 
-data class FileDow(var fileName: String, var path: String, var fileType: String="image/jpg")
-
-fun ResponseBody.download(fileDow: FileDow) {
+suspend inline fun ResponseBody.obver(fileDow: FileDow): Flow<Int> {
     with(fileDow) {
-        saveFileQ(
-            LiveConfig.config.mContext,
-            this@download, path, fileName, fileType
-        )
+        //        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+//            saveFileQ(
+//                LiveConfig.config.mContext,
+//                this@obver, path, fileName, fileType
+//            )
+//        } else {
+        return saveFile(this@obver, path, fileName, DowloadInfo(this@obver.contentLength()))
+//        }
     }
 
 }
@@ -136,7 +142,7 @@ fun saveFileQ(
         var read: Int
         `is` = body.byteStream() // 读入原文件
         val buffer = ByteArray(4096)
-        while (`is`.read(buffer).also { read = it } != -1) { //写入uri中
+        while (`is`.read(buffer).apply { read = this } > 0) { //写入uri中
             os!!.write(buffer, 0, read)
         }
     } catch (e: IOException) {
@@ -146,4 +152,55 @@ fun saveFileQ(
     }
     return insertUri
 }
-//url
+
+
+suspend inline fun saveFile(
+    body: ResponseBody,
+    path: String,
+    fileName: String,
+    fileInfo: DowloadInfo? = null
+): Flow<Int> {
+    return flow {
+        val f =
+            File(Environment.getExternalStorageDirectory().path + "/" + path + "/")
+        if (!f.exists()) {
+            f.mkdir()
+        }
+        val file = File(f.parent + "/" + path + "/" + fileName)
+        val `is`: InputStream
+        //下载进度
+        var dowloadSize = 0L
+        var os: OutputStream? = null
+        try {
+            var read: Int
+            var sizecopy = 0
+            os = FileOutputStream(file)
+            `is` = body.byteStream() // 读入原文件
+            val buffer = ByteArray(8192)
+            while (`is`.read(buffer).apply { read = this } > 0) {
+                os.write(buffer, 0, read)
+                fileInfo?.let {
+                    dowloadSize += read
+                    fileInfo.mDownloadLength = dowloadSize
+                    val siz = fileInfo.getFileInt()
+                    if (siz > sizecopy) {
+                        emit(siz)
+                        sizecopy = siz
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            if (os != null) {
+                try {
+                    os.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+//    return Uri.fromFile(file)
+}

@@ -7,7 +7,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 
@@ -29,11 +28,11 @@ public class GabonResponseBodyConverter<T> implements Converter<ResponseBody, T>
     @Override
     public T convert(ResponseBody value) throws IOException {
         String response = value.string();
-        if (mType == String.class || mType == RequestBody.class) {
+        if (mType == String.class || mType.getClass().isPrimitive()) {
             return (T) response;
         }
         Type bodyType = getParameterUpperBound((ParameterizedType) mType);
-        if (bodyType == String.class) {
+        if (bodyType == String.class || bodyType.getClass().isPrimitive()) {
             return (T) response;
         }
         return gson.fromJson(response, mType);

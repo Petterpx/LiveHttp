@@ -1,12 +1,8 @@
 package com.cloudx.livehttp
 
 import android.app.Application
-import com.cloudx.core.error.CodeBean
-import com.cloudx.core.error.ErrorCodeKts
-import com.cloudx.core.interceptor.LogInterceptor
+import com.cloudx.core.interceptor.CustomUrlInterceptor
 import com.cloudx.core.utils.LiveConfig
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 /**
  * Created by Petterp
@@ -23,7 +19,7 @@ class ContextKtx : Application() {
 //            .errorKtx(101, CodeBean("asda"))
             .interCeptor(ReceivedCookiesInterceptor())
             .interCeptor(AddHeaderInterceptor())
-            .interCeptor(LogInterceptor())
+            .interCeptor(CustomUrlInterceptor())
 //        ErrorCodeKts.getCode(101).obj()
     }
 

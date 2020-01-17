@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.telephony.mbms.FileInfo
+import android.util.Log
 import com.cloudx.core.download.DowloadInfo
 import com.cloudx.core.download.FileLister
 import com.cloudx.core.error.ErrorCodeKts
@@ -69,7 +70,6 @@ suspend inline fun <T> LiveResponse<T>.blockIO(
 /**
  * requestBody
  */
-
 inline fun requestBody(obj: () -> Map<String, String>): RequestBody =
     LiveConfig.config.mGson.toJson(obj()).toRequestBody(LiveConfig.config.mediaType)
 
@@ -161,6 +161,7 @@ suspend inline fun saveFile(
     fileInfo: DowloadInfo? = null
 ): Flow<Int> {
     return flow {
+        Log.e("petterp",Thread.currentThread().name)
         val f =
             File(Environment.getExternalStorageDirectory().path + "/" + path + "/")
         if (!f.exists()) {
@@ -185,6 +186,7 @@ suspend inline fun saveFile(
                     val siz = fileInfo.getFileInt()
                     if (siz > sizecopy) {
                         emit(siz)
+                        Log.e("petterp",Thread.currentThread().name)
                         sizecopy = siz
                     }
                 }

@@ -1,7 +1,7 @@
 package com.cloudx.core
 
 import android.os.Environment
-import com.cloudx.core.download.LiveDownload
+import android.util.Log
 import com.cloudx.core.factory.GabonConverterFactory
 import com.cloudx.core.interceptor.CacheInterceptor
 import com.cloudx.core.interceptor.RequestInterceptor
@@ -9,6 +9,8 @@ import com.cloudx.core.utils.LiveConfig
 import okhttp3.*
 import retrofit2.Retrofit
 import java.io.File
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
 import java.util.concurrent.TimeUnit
 
 /**
@@ -49,7 +51,7 @@ object LiveHttp {
             .writeTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
             .readTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
             .addNetworkInterceptor(RequestInterceptor())
-//            .cache(Cache(file, cacheSize.toLong())) // 配置缓存
+            .cache(Cache(file, cacheSize.toLong())) // 配置缓存
             .build()
 
         mRetrofit = Retrofit.Builder()
@@ -83,6 +85,5 @@ object LiveHttp {
         return retrofit.create(clazz)
     }
 
-    fun <T> download(clazz: Class<T>): T = LiveDownload.mRetrofit.create(clazz)
 
 }

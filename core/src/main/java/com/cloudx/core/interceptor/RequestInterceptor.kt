@@ -8,7 +8,7 @@ import okhttp3.Response
 /**
  * Created by Petterp
  * on 2020-01-13
- * Function:
+ * Function: 缓存
  */
 class RequestInterceptor : Interceptor {
 

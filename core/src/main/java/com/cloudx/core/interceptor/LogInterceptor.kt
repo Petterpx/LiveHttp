@@ -14,9 +14,9 @@ import java.nio.charset.Charset
 /**
  * Created by Petterp
  * on 2020-01-17
- * Function:
+ * Function: 日志打印
  */
-class CustomUrlInterceptor : Interceptor {
+class LogInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
 
@@ -33,31 +33,32 @@ class CustomUrlInterceptor : Interceptor {
                     method, url, request.headers, reqBody
                 )
             )
+
         }
 
 
-
         try {
-            val body = response.body?.let {
-                val source = it.source()
-                source.request(Long.MAX_VALUE) // Buffer the entire body.
-                val buffer: Buffer = source.buffer
-                val charset: Charset = Charset.forName("UTF-8")
-                buffer.clone().readString(charset)
-            }
-            with(response) {
-                Log.e(
-                    "livehttp", String.format(
-                        "收到响应\n响应码%s\n请求url：%s\n请求body：%s\n返回body：%s",
-                        code, message, request.url, body
-                    )
-                )
+            //如果是文件，需要处理一下
+            response.body?.let {
+                if (it.contentLength() == -1L) {
+                    val source = it.source()
+                    source.request(Long.MAX_VALUE) // Buffer the entire body.
+                    val buffer: Buffer = source.buffer
+                    val charset: Charset = Charset.forName("UTF-8")
+                    val body = buffer.clone().readString(charset)
+                    with(response) {
+                        Log.e(
+                            "livehttp", String.format(
+                                "收到响应\n响应码%s\n请求url：%s\n请求body：%s\n返回body：%s",
+                                code, message, request.url, body
+                            )
+                        )
+                    }
+                }
             }
         } catch (e: Exception) {
             Log.e("livehttp", "logInterceptor-Error-${e.message}")
         }
-
-
         return response
 
     }

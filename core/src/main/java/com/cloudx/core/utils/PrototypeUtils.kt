@@ -1,21 +1,20 @@
-package com.cloudx.core.interceptor
+package com.cloudx.core.utils
 
 import okhttp3.Response
-import okhttp3.ResponseBody
 
 /**
  * Created by Petterp
  * on 2020-01-17
- * Function:
+ * Function: 深拷贝utils
  */
 
-class Prototype(var responseBody: Response) : Cloneable {
+class PrototypeUtils(var responseBody: Response) : Cloneable {
 
     //实现克隆接口
     //重写克隆方法，默认浅克隆
     public override fun clone(): Any {
         val c = super.clone()
-        if (c is Prototype) c.responseBody = responseBody
+        if (c is PrototypeUtils) c.responseBody = responseBody
         return c
     }
 }

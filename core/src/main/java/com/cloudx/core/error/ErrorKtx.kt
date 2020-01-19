@@ -4,7 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 
 /**
- * 异常处理
+ * Retrofit异常处理
+ * //参考自掘金
  */
 suspend fun tryCatch(
     catchBlock: suspend CoroutineScope.(e: Throwable) -> Unit = {},

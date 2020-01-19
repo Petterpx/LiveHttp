@@ -1,7 +1,7 @@
 package com.cloudx.livehttp
 
 import android.app.Application
-import com.cloudx.core.interceptor.CustomUrlInterceptor
+import com.cloudx.core.interceptor.LogInterceptor
 import com.cloudx.core.utils.LiveConfig
 
 /**
@@ -19,7 +19,7 @@ class ContextKtx : Application() {
 //            .errorKtx(101, CodeBean("asda"))
             .interCeptor(ReceivedCookiesInterceptor())
             .interCeptor(AddHeaderInterceptor())
-            .interCeptor(CustomUrlInterceptor())
+            .interCeptor(LogInterceptor())
 //        ErrorCodeKts.getCode(101).obj()
     }
 

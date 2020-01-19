@@ -14,7 +14,7 @@ class ContextKtx : Application() {
     override fun onCreate() {
         super.onCreate()
         LiveConfig
-            .baseUrl("https://qingfeng.rmny.com.cn:180/")
+            .baseUrl("https://www.wanandroid.com/")
             .context(this@ContextKtx)
             .interCeptor(LogInterceptor())
 //        ErrorCodeKts.getCode(101).obj()

@@ -7,7 +7,7 @@ import java.io.IOException
 /**
  * Created by Petterp
  * on 2020-01-14
- * Function:
+ * Function: 缓存拦截器
  */
 class CacheInterceptor : Interceptor {
     @Throws(IOException::class)

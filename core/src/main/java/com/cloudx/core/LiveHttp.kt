@@ -5,6 +5,7 @@ import com.cloudx.core.interceptor.CacheInterceptor
 import com.cloudx.core.interceptor.RequestInterceptor
 import okhttp3.*
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
@@ -44,7 +45,8 @@ object LiveHttp {
         mRetrofit = Retrofit.Builder()
             .baseUrl(liveConfig.mBaseUrl)
             .client(mOkHttpClient)
-            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGoon))
+//            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGoon))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
         mApiMaps = HashMap(10)
     }

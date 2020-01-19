@@ -14,7 +14,7 @@ import java.nio.charset.Charset
 /**
  * Created by Petterp
  * on 2020-01-17
- * Function: 日志打印
+ * Function: 日志拦截，（不响应文件下载body）
  */
 class LogInterceptor : Interceptor {
 

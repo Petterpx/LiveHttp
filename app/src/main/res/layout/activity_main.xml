@@ -11,13 +11,13 @@
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="点击登录" />
+        android:text="点击登录->demo" />
 
     <Button
         android:id="@+id/btn_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="获取本地图片" />
+        android:text="测试获取本地图片" />
 
     <ImageView
         android:id="@+id/img"
@@ -28,16 +28,32 @@
         android:id="@+id/btn_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="上传文件" />
+        android:text="上传文件->demo" />
+
+    <Button
+        android:id="@+id/btn_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发起git请求-通用" />
 
     <Button
         android:id="@+id/btn_download"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="下载文件" />
+        android:text="下载文件，直接返回Url-通用" />
+
     <Button
-        android:id="@+id/btn_get"
+        android:id="@+id/btn_download_schedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="发起git请求" />
+        android:text="下载文件带进度显示-通用" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_marginTop="20dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

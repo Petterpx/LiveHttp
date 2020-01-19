@@ -1,16 +1,10 @@
 package com.cloudx.core
 
-import android.os.Environment
-import android.util.Log
 import com.cloudx.core.factory.GabonConverterFactory
 import com.cloudx.core.interceptor.CacheInterceptor
 import com.cloudx.core.interceptor.RequestInterceptor
-import com.cloudx.core.utils.LiveConfig
 import okhttp3.*
 import retrofit2.Retrofit
-import java.io.File
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
 import java.util.concurrent.TimeUnit
 
 /**
@@ -26,16 +20,11 @@ object LiveHttp {
 
 
     init {
-        // 缓存目录
-        val file =
-            File(Environment.getExternalStorageDirectory(), "a_cache")
-        // 缓存大小
-        val cacheSize = 10 * 1024 * 1024
         val builder = OkHttpClient.Builder()
         val liveConfig = LiveConfig.config
         val interceptorList: ArrayList<Interceptor> = liveConfig.mInterceptorList
 
-        //默认开启网络缓存
+        //默认关闭网络缓存
         if (liveConfig.mIsCache) {
             builder.addInterceptor(CacheInterceptor())
                 .addNetworkInterceptor(RequestInterceptor())
@@ -50,14 +39,12 @@ object LiveHttp {
             .connectTimeout(liveConfig.mConnectTimeout, TimeUnit.SECONDS)
             .writeTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
             .readTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
-            .addNetworkInterceptor(RequestInterceptor())
-            .cache(Cache(file, cacheSize.toLong())) // 配置缓存
             .build()
 
         mRetrofit = Retrofit.Builder()
             .baseUrl(liveConfig.mBaseUrl)
             .client(mOkHttpClient)
-            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGson))
+            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGoon))
             .build()
         mApiMaps = HashMap(10)
     }
@@ -80,7 +67,7 @@ object LiveHttp {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(mOkHttpClient)
-            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGson))
+            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGoon))
             .build()
         return retrofit.create(clazz)
     }

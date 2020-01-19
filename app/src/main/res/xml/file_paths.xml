@@ -7,7 +7,7 @@
         name="rc_root_path"
         path="" />
     <external-path
-        name="test"
+        name="com.cloudx.livehttp"
         path="." />
 
 </paths>

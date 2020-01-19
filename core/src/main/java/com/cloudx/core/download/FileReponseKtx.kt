@@ -9,7 +9,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import com.cloudx.core.utils.LiveConfig
+import com.cloudx.core.LiveConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,8 @@ import java.lang.Exception
  * Created by Petterp
  * on 2020-01-17
  * Function: 文件操纵类
- * Android P测试通过
+ * Android P 测试通过
+ * Android 10 测试通过
  */
 class DownloadInfo(private var mTotalLength: Long) {
     var mDownloadLength: Long = 0
@@ -148,7 +149,6 @@ suspend inline fun file(
                     flow?.emit(siz)
                     sizeCopy = siz
                 }
-                Log.e("petterp", Thread.currentThread().name)
             }
         }
     } catch (e: Exception) {

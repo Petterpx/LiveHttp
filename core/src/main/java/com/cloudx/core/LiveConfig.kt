@@ -1,35 +1,36 @@
-package com.cloudx.core.utils
+package com.cloudx.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Environment
 import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.ErrorCodeKts
-import com.cloudx.core.interceptor.LogInterceptor
 import com.cloudx.core.interceptor.RequestInterceptor
 import com.google.gson.Gson
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import java.io.File
 
 /**
  * Created by Petterp
  * on 2020-01-13
- * Function:
+ * Function: 配置细信息
  */
 object LiveConfig {
     val config = Config()
 
     class Config {
         lateinit var mContext: Context
-        var mIsCache = true
+        var mIsCache = false
         var mWriteTimeout = 30L
         var mConnectTimeout = 10L
         lateinit var mBaseUrl: String
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
-        val mGson = Gson()
+        val mGoon = Gson()
         val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
         @SuppressLint("NewApi")
-        var downloadName="livehttp"
+        var downloadName = ""
     }
 
 
@@ -39,8 +40,7 @@ object LiveConfig {
     fun initDefault(context: Context, url: String) {
         config.mContext = context
         config.mBaseUrl = url
-        config.mInterceptorList.add(LogInterceptor())
-        config.downloadName=context.packageName
+        config.downloadName = context.packageName
     }
 
     fun baseUrl(url: String): LiveConfig {
@@ -50,6 +50,7 @@ object LiveConfig {
 
     fun context(context: Context): LiveConfig {
         config.mContext = context
+        config.downloadName = context.packageName
         return this
     }
 
@@ -86,6 +87,11 @@ object LiveConfig {
 
     fun errorKtx(sprArray: SparseArray<CodeBean>): LiveConfig {
         ErrorCodeKts.putCodeAll(sprArray)
+        return this
+    }
+
+    fun filePath(path: String): LiveConfig {
+        config.downloadName = path
         return this
     }
 

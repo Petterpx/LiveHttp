@@ -2,6 +2,7 @@
 
 package com.cloudx.core.utils
 
+import com.cloudx.core.LiveConfig
 import com.cloudx.core.error.ErrorCodeKts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -57,7 +58,8 @@ suspend inline fun <T> LiveResponse<T>.blockIO(
  * requestBody
  */
 inline fun requestBody(obj: () -> Map<String, String>): RequestBody =
-    LiveConfig.config.mGson.toJson(obj()).toRequestBody(LiveConfig.config.mediaType)
+    LiveConfig.config.mGoon.toJson(obj()).toRequestBody(
+        LiveConfig.config.mediaType)
 
 
 /**

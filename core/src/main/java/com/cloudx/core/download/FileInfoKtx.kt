@@ -1,6 +1,6 @@
 package com.cloudx.core.download
 
-import com.cloudx.core.utils.LiveConfig
+import com.cloudx.core.LiveConfig
 
 /**
  * Created by Petterp

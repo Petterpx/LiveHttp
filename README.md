@@ -1,4 +1,4 @@
-# BlueHttp
+# LiveHttp
 
 ### 基于 Retrofit+Coroutines 的网络请求组件。
 
@@ -12,7 +12,6 @@
 - 完善的异常处理机制，支持全局异常处理，单独处理，业务单独处理
 - 全局傻瓜式自定义配置，或者使用默认配置
 - 得益于 kt 与 Retrofit 2.6+的特性，Get，Post ,只需要一行即可解决
-- 使用 Coroutines 
 
 
 
@@ -32,7 +31,7 @@ allprojects {
 
 ```groovy
 dependencies {
-	        implementation 'com.github.people-rmxc:LiveHttp:1.0'
+	        implementation 'com.github.people-rmxc:LiveHttp:1.1'
 	}
 ```
 
@@ -144,6 +143,8 @@ liveHttp.login(requestBody {
 
 
 
+
+
 ### 文件上传
 
 ```kotlin
@@ -175,6 +176,8 @@ serviceApi.uploadFiles(fileBodys {
                         )
                     })
 ```
+
+
 
 
 

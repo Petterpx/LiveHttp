@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val createApi = createApi(ApiTest::class.java)
+        val serviceApi = createApi(ApiTest::class.java)
 
         btn_get.setOnClickListener {
 
@@ -36,10 +36,10 @@ class MainActivity : AppCompatActivity() {
                     //Retrofit异常
                     Log.e("petterp", it.message)
                 }) {
-                    createApi.getWan().blockMain({
+                    serviceApi.getWan().blockMain({
                         //失败处理，处理错误码，这里携带了我们错误数据，便于处理
                         //如果你定义了全局错误处理，这里相当于替换本次错误处理规则
-                        //注意，这里已经成功切换为主线程
+                        //注意，这里已经切换为主线程
                         Log.e("petterp", it.second)
 
                     }) {
@@ -47,6 +47,12 @@ class MainActivity : AppCompatActivity() {
                         toast("长度为${it.size}")
                     }
                 }
+
+
+                serviceApi.getWan().blockMain {
+
+                }
+
             }
         }
 
@@ -61,12 +67,12 @@ class MainActivity : AppCompatActivity() {
         btn_upload.setOnClickListener {
             lifecycleScope.launch {
                 launch {
-                    createApi.uploadFile(fileBody {
+                    serviceApi.uploadFile(fileBody {
                         FileBean(File("你的文件"))
                     })
 
                     //多文件
-                    createApi.uploadFiles(fileBodys {
+                    serviceApi.uploadFiles(fileBodys {
                         listOf(
                             FileBean(File("你的文件")),
                             FileBean(File("你的文件"))
@@ -81,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             val apk =
                 "https://tva1.sinaimg.cn/large/006tNbRwly1gaxggh8lzag30oo0dw4ko.gif"
             lifecycleScope.launch {
-                createApi.dowload(apk)
+                serviceApi.dowload(apk)
                     .over(DownloadFileKtx("test.gif", "test")).let {
                         toast(it.toString())
                     }
@@ -92,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             val apk =
                 "http://s.duapps.com/apks/own/ESFileExplorer-V4.2.1.9.apk"
             lifecycleScope.launch {
-                createApi.dowload(apk)
+                serviceApi.dowload(apk)
                     .overSchedule(DownloadFileKtx("es.apk", "test")) {
                         toast(it.toString())
                     }.collect {

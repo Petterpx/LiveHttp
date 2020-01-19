@@ -34,6 +34,7 @@ data class DownloadFileKtx(
      * 文件保存路径
      */
     var path: String = LiveConfig.config.downloadName
+
 )
 
 

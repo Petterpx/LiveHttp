@@ -33,6 +33,13 @@ suspend inline fun <T> WanResponse<T>.blockMain(
     }
 }
 
+fun <T> WanResponse<T>.blockData(): T? {
+    if (errorCode == 0) {
+        return data
+    }
+    return null
+}
+
 
 suspend inline fun <T> WanResponse<T>.blockIO(
     noinline error: ((Pair<Int, String>) -> Unit)? = null,

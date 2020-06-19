@@ -9,6 +9,7 @@ import com.cloudx.core.error.ErrorCodeKts
 import com.cloudx.core.interceptor.LiveLog
 import com.cloudx.core.interceptor.RequestInterceptor
 import com.google.gson.Gson
+import kotlinx.coroutines.coroutineScope
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
@@ -34,6 +35,7 @@ object LiveConfig {
         @SuppressLint("NewApi")
         var downloadName = ""
     }
+
 
     /** 用于 Start-APP 初始化，默认会初始化存储路径 */
     internal fun initContext(context: Context) {

@@ -10,14 +10,13 @@ import com.cloudx.core.LiveConfig
  * Function:
  */
 class ContextKtx : Application() {
-
     override fun onCreate() {
         super.onCreate()
+        //无需再去配置context，内部已经使用了start App组件
         LiveConfig
             .baseUrl("https://www.wanandroid.com/")
-            .context(this@ContextKtx)
-            .interCeptor(LogInterceptor())
-//        ErrorCodeKts.getCode(101).obj()
+//            .interceptor(LogInterceptor())
+//            .log()
     }
 
 }

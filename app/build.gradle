@@ -38,7 +38,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    api project(path: ':core')
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$nav_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$nav_version"
+
+    //测试时，请将compileOnly 改为 implementation
+    implementation project(path: ':core')
 }

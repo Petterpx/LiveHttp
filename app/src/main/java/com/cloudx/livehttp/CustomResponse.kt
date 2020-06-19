@@ -20,7 +20,9 @@ inline fun <T> WanResponse<T>.block(
         data?.let { success(it) }
     } else {
         blockError?.let { it(errorCode to errorMsg) }
-            ?: ErrorCodeKts.getCode(errorCode).obj.invoke()
+            ?: ErrorCodeKts.getCode(errorCode)?.apply {
+                obj(errorMsg)
+            }
     }
 }
 

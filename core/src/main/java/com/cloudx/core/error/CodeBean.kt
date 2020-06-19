@@ -4,5 +4,6 @@ package com.cloudx.core.error
  * Created by Petterp
  * on 2020-01-14
  * Function: 异常处理方法
+ * 暂时在这里
  */
-data class CodeBean(val message: String, val obj: () -> Boolean = { true })
+data class CodeBean( val obj:suspend (String) -> Unit = { })

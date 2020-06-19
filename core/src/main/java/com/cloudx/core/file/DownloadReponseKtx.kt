@@ -21,9 +21,7 @@ import okhttp3.ResponseBody
 import java.io.*
 import java.lang.Exception
 
-/**
- * 具体的文件数据类
- */
+/** 具体的文件数据类 */
 data class DownloadFileKtx(
     /**
      * 文件名,需要后缀

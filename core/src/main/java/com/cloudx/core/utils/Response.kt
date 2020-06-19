@@ -12,9 +12,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 /**
  * Created by Petterp
  * on 2020-01-14
- * Function:
+ * Function: 资源包装，自定义参考这里
  */
-data class LiveResponse<out T>(val result: Result, val t: T)
+class LiveResponse<out T>(val result: Result, val t: T)
 
 data class Result(val c: Int, val m: String)
 
@@ -23,11 +23,12 @@ inline fun <T> LiveResponse<T>.block(
     noinline blockError: ((Result) -> Unit?)?,
     success: (T) -> Unit
 ) {
+
     if (result.c == 200) {
         success(t)
     } else {
-        blockError?.let { it(result) }
-            ?: ErrorCodeKts.getCode(result.c).obj
+//        blockError?.let { it(result) }
+//            ?: ErrorCodeKts.getCode(result.c)
     }
 }
 
@@ -54,10 +55,11 @@ suspend inline fun <T> LiveResponse<T>.blockIO(
 /**
  * requestBody
  */
-inline fun requestBody(obj: () -> Map<String, String>): RequestBody =
-    LiveConfig.config.mGoon.toJson(obj()).toRequestBody(
+inline fun requestBody(obj: () -> Map<String, Any>): RequestBody =
+    LiveConfig.config.mGson.toJson(obj()).toRequestBody(
         LiveConfig.config.mediaType
     )
+
 
 
 

@@ -6,7 +6,10 @@ import com.cloudx.core.interceptor.RequestInterceptor
 import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Created by Petterp
@@ -40,13 +43,14 @@ object LiveHttp {
             .connectTimeout(liveConfig.mConnectTimeout, TimeUnit.SECONDS)
             .writeTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
             .readTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
+            .protocols(Collections.singletonList(Protocol.HTTP_1_1))
+            .retryOnConnectionFailure(true)
             .build()
 
         mRetrofit = Retrofit.Builder()
             .baseUrl(liveConfig.mBaseUrl)
             .client(mOkHttpClient)
-//            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGoon))
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGson))
             .build()
         mApiMaps = HashMap(10)
     }
@@ -69,7 +73,7 @@ object LiveHttp {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(mOkHttpClient)
-            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGoon))
+            .addConverterFactory(GabonConverterFactory.create(LiveConfig.config.mGson))
             .build()
         return retrofit.create(clazz)
     }

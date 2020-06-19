@@ -1,11 +1,16 @@
 package com.cloudx.livehttp
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import com.android.ktx.toast
 import com.cloudx.core.LiveHttp.createApi
 import com.cloudx.core.error.launchHttp
 import com.cloudx.core.file.*
@@ -15,11 +20,20 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
 import java.io.File
+import java.lang.Exception
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MainActivity : AppCompatActivity() {
+    lateinit var file: File
+
     @SuppressLint("NewApi")
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
@@ -29,6 +43,12 @@ class MainActivity : AppCompatActivity() {
         val serviceApi = createApi(ApiTest::class.java)
 
         btn_get.setOnClickListener {
+
+            requestBody {
+                mapOf(
+                    "" to ""
+                )
+            }
 
             //按照LiveResponse定义自己的响应样式
             lifecycleScope.launch {
@@ -44,7 +64,8 @@ class MainActivity : AppCompatActivity() {
 
                     }) {
                         //成功处理，直接返回我们需要的数据类型
-                        toast("长度为${it.size}")
+                        Toast.makeText(this@MainActivity, "长度为${it.size}", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
 
@@ -89,7 +110,6 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 serviceApi.dowload(apk)
                     .over(DownloadFileKtx("test.gif", "test")).let {
-                        toast(it.toString())
                     }
             }
         }
@@ -100,7 +120,6 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 serviceApi.dowload(apk)
                     .overSchedule(DownloadFileKtx("es.apk", "test")) {
-                        toast(it.toString())
                     }.collect {
                         //此时已发到父launch所在线程，当前即为main
                         progressBar.progress = it
@@ -108,6 +127,35 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
+        btn_upload_test_xl.setOnClickListener {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            file = File(
+                Environment.getExternalStorageDirectory(), "${System.currentTimeMillis()}.png"
+            )
+            cameraIntent.putExtra(
+                MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(
+                    this,
+                    this.applicationContext.packageName + ".FileProvider",
+                    file
+                )
+            )
+            startActivityForResult(cameraIntent, 110)
+        }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 110 && resultCode == Activity.RESULT_OK) {
+            Log.e("petterp", "File---$file")
+            lifecycleScope.launch {
+                val serviceApi = createApi(ApiTest::class.java)
+                val uploadXl = serviceApi.uploadXl(fileBody {
+                    FileBean(file)
+                }).apply {
+                    Log.e("petterp", this)
+                }
+            }
+        }
+    }
+
 }

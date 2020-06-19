@@ -1,2 +1,2 @@
-include ':app', ':core', ':ktx'
+include ':app', ':core'
 rootProject.name='LiveHttp'

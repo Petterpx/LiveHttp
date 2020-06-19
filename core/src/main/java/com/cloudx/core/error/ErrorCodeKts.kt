@@ -12,6 +12,7 @@ import androidx.core.util.putAll
 object ErrorCodeKts {
 
     private val mSparseArray = SparseArray<CodeBean>()
+
     /**
      * put错误码
      */
@@ -24,10 +25,7 @@ object ErrorCodeKts {
         mSparseArray.putAll(codeArray)
     }
 
-    fun getCode(code: Int): CodeBean {
-        if (code in mSparseArray) {
-            return mSparseArray[code]
-        }
-        return CodeBean("未知错误")
+    fun getCode(code: Int): CodeBean? {
+        return mSparseArray[code]
     }
 }

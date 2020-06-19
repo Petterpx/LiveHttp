@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+    def nav_version = "2.2.0"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -38,7 +39,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     api project(path: ':core')
-    implementation project(path: ':ktx')
-
-
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$nav_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$nav_version"
 }

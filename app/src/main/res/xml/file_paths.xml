@@ -9,5 +9,8 @@
     <external-path
         name="com.cloudx.livehttp"
         path="." />
+    <external-path
+        name="."
+        path="." />
 
 </paths>

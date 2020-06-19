@@ -6,6 +6,7 @@ import android.os.Environment
 import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.ErrorCodeKts
+import com.cloudx.core.interceptor.LiveLog
 import com.cloudx.core.interceptor.RequestInterceptor
 import com.google.gson.Gson
 import okhttp3.Interceptor
@@ -15,7 +16,7 @@ import java.io.File
 /**
  * Created by Petterp
  * on 2020-01-13
- * Function: 配置细信息
+ * Function: 配置信息
  */
 object LiveConfig {
     val config = Config()
@@ -27,30 +28,28 @@ object LiveConfig {
         var mConnectTimeout = 10L
         lateinit var mBaseUrl: String
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
-        val mGoon = Gson()
+        val mGson = Gson()
         val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
+
         @SuppressLint("NewApi")
         var downloadName = ""
     }
 
-
-    /**
-     *  初始化
-     */
-    fun initDefault(context: Context, url: String) {
+    /** 用于 Start-APP 初始化，默认会初始化存储路径 */
+    internal fun initContext(context: Context) {
         config.mContext = context
-        config.mBaseUrl = url
         config.downloadName = context.packageName
     }
 
-    fun baseUrl(url: String): LiveConfig {
-        config.mBaseUrl = url
+    fun log(): LiveConfig {
+        LiveLog.init()
         return this
     }
 
-    fun context(context: Context): LiveConfig {
-        config.mContext = context
-        config.downloadName = context.packageName
+
+    /** baseUrl */
+    fun baseUrl(url: String): LiveConfig {
+        config.mBaseUrl = url
         return this
     }
 
@@ -59,7 +58,7 @@ object LiveConfig {
         return this
     }
 
-    fun WriteTimeout(time: Long): LiveConfig {
+    fun writeTimeout(time: Long): LiveConfig {
         config.mWriteTimeout = time
         return this
     }
@@ -70,12 +69,12 @@ object LiveConfig {
         return this
     }
 
-    fun interCeptors(list: ArrayList<Interceptor>): LiveConfig {
+    fun interceptors(list: ArrayList<Interceptor>): LiveConfig {
         config.mInterceptorList = list
         return this
     }
 
-    fun interCeptor(interceptor: Interceptor): LiveConfig {
+    fun interceptor(interceptor: Interceptor): LiveConfig {
         config.mInterceptorList.add(interceptor)
         return this
     }

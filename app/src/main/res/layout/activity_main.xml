@@ -62,4 +62,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:id="@+id/btn_upload_test_xl"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

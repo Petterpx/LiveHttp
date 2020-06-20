@@ -2,16 +2,22 @@
 
 ### 基于 Retrofit+Coroutines 的网络请求组件。
 
+> 网络请求一直是我们开发中比较重的组件，但通常我们对他的使用也仅限于一些普通的使用，如果你厌烦了过重的网络框架，那么LiveHttp将是一个比较好的选择，代码简洁易看懂，如果对你有所帮助，不妨点个star。
+
 ### 
 
 ### 为什么要使用它？
 
 得益于 **Kotlin** 简洁优雅的语法与 **Coroutines** 的强大支持，LiveHttp 支持以下功能：
 
-- 简洁的文件上传下载，已适配至Android10，使用Flow返回进度
-- 完善的异常处理机制，支持全局异常处理，单独处理，业务单独处理
-- 全局傻瓜式自定义配置，或者使用默认配置
-- 得益于 kt 与 Retrofit 2.6+的特性，Get，Post ,只需要一行即可解决
+- 简洁的文件上传下载，已适配至Android10，使用Flow返回进度；
+- 完善的异常处理机制，支持全局异常处理，单独处理，业务单独处理；
+- 全局全局自定义错误配置，或者使用默认配置；
+- 支持ktx扩展；
+
+
+
+
 
 
 
@@ -31,22 +37,63 @@ allprojects {
 
 ```groovy
 dependencies {
-	        implementation 'com.github.people-rmxc:LiveHttp:1.1'
+	        implementation 'com.github.people-rmxc:LiveHttp:1.1.1'
 	}
 ```
 
 ### 初始化LiveHttp
 
 ```kotlin
-LiveConfig.initDefault(this,"你的baseUrl")
+无需初始化了，已加入JetPack-startup组件，自动注入了context
 ```
+
+### 自行导入以下组件：
+
+```groovy
+ implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+ implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+ implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+ implementation "com.squareup.okhttp3:logging-interceptor:4.3.0"
+ implementation "androidx.startup:startup-runtime:1.0.0-alpha01"
+ implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5"
+```
+
+#### 如果需要LiveHttp对于ViewModel-ktx或者Lifecycle-Ktx的扩展，请加入
+
+```groovy
+implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+
+//ViewModel
+launchVMhttp{
+  
+}
+//FragmentActivity&Fragment
+launchLfHttp{
+  
+}
+```
+
+#### 如果需要日志提示，请导入
+
+```groovy
+implementation 'com.orhanobut:logger:2.2.0'
+
+//Application
+LiveConfig.log()
+```
+
+#### 关于混淆：
+
+框架内部已进行处理，无需再次处理；
+
+
 
 #### 想定义更多参数？
 
 ```kotlin
  LiveConfig
             .baseUrl("你的baseUrl")   //baseUrl
-            .context(this)       //context
             .WriteTimeout(30L)     //设置读写超时时间，默认30l
             .connectTimeout(10L)  //设置连接超时时间,默认10l
             .isCache(true)     //开启网络缓存，默认开启
@@ -62,14 +109,16 @@ LiveConfig.initDefault(this,"你的baseUrl")
 
 
 
+
+
 ***以下示例均在Activity中使用，推荐在ViewModel中使用***
 
 ### 发起一个Get请求
 
 ```kotlin
-//Activity
-lifecycleScope.launch {
-                launchHttp(errorBlock = {
+//FragmentActivity
+
+            launchLfHttp(errorBlock = {
                     //Retrofit异常，可配置全局统一处理
                     Log.e("petterp", it.message)
                 }) {
@@ -83,18 +132,18 @@ lifecycleScope.launch {
                         //成功处理，直接返回我们需要的数据类型
                         toast("长度为${it.size}")
                     }
-                }
             }
 ```
 
 #### 可以再简单一点？
 
-> 需将异常处理放在核心base类中通一处理，搭配系统框架使用
-
 ```kotlin
-serviceApi.getWan().blockMain { 
-      				//完成服务器异常码处理并切换到主线程    
+//异步
+serviceApi.getWan().syncBlock{ 
+      						//这里拿到数据
                 }
+//同步写法，异步处理
+val res=serviceApi.getWan().block()
 ```
 
 
@@ -113,32 +162,16 @@ interface ApiTest {
 ```
 
 ```kotlin
-lifecycleScope.launch(Dispatchers.IO) {
-                launchHttp {
-                    LiveHttp.createApi(ApiTest::class.java)
-                        .login(requestBody {
-                            mapOf("mobile" to "xxxxxxxxxxx", "code" to "123")
-                        })
-                        .block(blockError =
-                        {
-                           //错误处理,如果设置了全局处理操作，这里可以忽略
-                        }
-                        ) {
-													//成功处理
-                          //切换线程
-                          withContext(Dispatchers.MAIN)
-                        }
-                }
+ launchLfHttp {
+      //异步
+      LiveHttp.createApi(ApiTest::class.java)
+          .login(requestBody {
+              mapOf("mobile" to "xxxxxxxxxxx", "code" to "123")
+          })
+      
+     //同步写法，异步处理
+     val isSuccess = LiveHttp.createApi(ApiTest::class.java).login() 
 }
-```
-
-##### 可以再简单一点？
-
-```kotlin
-//liveHttp-> 接口对象定义为全局
-liveHttp.login(requestBody {
-                mapOf("mobile" to "!23", "code" to "!231")
-               }).blockMain {  }  //请求成功后自动切换Main线程并完成异常处理
 ```
 
 
@@ -156,13 +189,11 @@ suspend fun uploadFile(@Part file: MultipartBody.Part): String
 #### 单文件上传
 
 ```kotlin
-lifecycleScope.launch {
-                launch {
+              launchLfHttp {
                     serviceApi.uploadFile(fileBody {
                         FileBean(File("你的文件"))
                     })
                 }
-            }
 ```
 
 #### 多文件上传
@@ -208,7 +239,7 @@ serviceApi.uploadFiles(fileBodys {
 
 ```kotlin
 val apk ="https://tva1.sinaimg.cn/large/006tNbRwly1gaxggh8lzag30oo0dw4ko.gif"
-            lifecycleScope.launch {
+            launchLfHttp {
                 serviceApi.dowload(apk)
                     .over(DownloadFileKtx("文件名.后缀", "路径path")).let {
                         toast(it.toString())
@@ -223,7 +254,7 @@ val apk ="https://tva1.sinaimg.cn/large/006tNbRwly1gaxggh8lzag30oo0dw4ko.gif"
 ```kotlin
 val apk ="http://s.duapps.com/apks/own/ESFileExplorer-V4.2.1.9.apk"
         
-           lifecycleScope.launch {
+           launchLfHttp {
                 serviceApi.dowload(apk)
                     .overSchedule(DownloadFileKtx("es.apk", "test")) {
                       	//返回Uri

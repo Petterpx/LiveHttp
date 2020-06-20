@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.cloudx.core.LiveHttp
 import com.cloudx.core.error.launchHttp
+import com.cloudx.core.error.launchLfHttp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnLogin.setOnClickListener {
-            launchHttp {
+            launchLfHttp {
                 val baiDu = LiveHttp.createApi(ApiTest::class.java).getBaiDu()
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@MainActivity, baiDu, Toast.LENGTH_SHORT).show()

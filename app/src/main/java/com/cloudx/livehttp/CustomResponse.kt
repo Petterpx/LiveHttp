@@ -15,6 +15,12 @@ import kotlinx.coroutines.withContext
  */
 
 
+data class WanResponse<out T>(val result: Result, val data: T, val refreshTime: Long)
+
+data class Result(val c: Int, val m: String)
+
+
+
 /**
  * 对于同步的扩展
  * 这也是kt 的一大特性，异步代码写成同步形式，其实可以理解为这就是一个逻辑上的处理，suspend在内部是一个标记，具体自查吧

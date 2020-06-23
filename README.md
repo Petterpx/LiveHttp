@@ -94,23 +94,21 @@ LiveConfig.log()
 ```kotlin
  LiveConfig
             .baseUrl("你的baseUrl")   //baseUrl
-            .WriteTimeout(30L)     //设置读写超时时间，默认30l
+            .writeTimeout(30L)     //设置读写超时时间，默认30l
             .connectTimeout(10L)  //设置连接超时时间,默认10l
-            .isCache(true)     //开启网络缓存，默认开启
-            .listInterCeptor()       //设置你的拦截器
-						.filePath()    //文件下载路径
-				
-		
-
-						//以下错误逻用于全局请求码处理,具体处理方式皆处于挂起函数
-            .errorKtx(101, CodeBean("这是错误码处理逻辑，全局处理") {
-              //对于code=101的处理
+            .isCache(true)     //开启网络缓存，默认关闭
+            .filePath("xxx")    //文件下载路径
+                
+            //以下错误逻用于全局请求码处理,具体处理方式皆处于挂起函数
+            .errorCodeKtx(101, CodeBean {
+                //默认为发起网络请求的线程，一般为io,记得调用withContext()
+                //对于code=101的处理
             })
-            .errorKtx(SparseArray<CodeBean>())  //添加批量错误逻辑处理
+						//.errorCodeKtx(SparseArray<CodeBean>())  //添加批量错误逻辑处理
 
-						
-						//以下错误用于网络异常处理，具体处理方式皆处于挂起函数
-						.errorHttpKtx(EnumException.NET_DISCONNECT) {
+
+            //以下错误用于网络异常处理，具体处理方式皆处于挂起函数
+            .errorHttpKtx(EnumException.NET_DISCONNECT) {
                 Log.e("petterp", "网络断开")
             }
             .universalErrorHttpKtx {
@@ -130,6 +128,8 @@ LiveConfig.log()
                 }
 
             })
+						//需导入log依赖
+            .log()
 ```
 
 

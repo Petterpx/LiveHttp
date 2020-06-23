@@ -40,9 +40,9 @@ object LiveHttp {
         }
 
         mOkHttpClient = builder.retryOnConnectionFailure(true)
-            .connectTimeout(10, TimeUnit.SECONDS)
-//            .writeTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
+            .connectTimeout(liveConfig.mConnectTimeout, TimeUnit.SECONDS)
+            .writeTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
+            .readTimeout(liveConfig.mWriteTimeout, TimeUnit.SECONDS)
             .protocols(Collections.singletonList(Protocol.HTTP_1_1))
             .retryOnConnectionFailure(true)
             .build()

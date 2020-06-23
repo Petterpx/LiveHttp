@@ -2,7 +2,7 @@ package com.cloudx.livehttp
 
 import android.widget.Toast
 import com.cloudx.core.LiveConfig
-import com.cloudx.core.error.ErrorCodeKts
+import com.cloudx.core.error.ErrorHttpKtx
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -44,7 +44,7 @@ suspend inline fun <T> WanResponse<T>.block(
             return null
         }
         //一般情况下，执行的都是全局异常处理，这里也是挂起函数，便于可能存在的耗时操作
-        ErrorCodeKts.getCode(result.c)?.let {
+        ErrorHttpKtx.getCode(result.c)?.let {
             it.obj(result.m)
         }
         return null
@@ -99,7 +99,7 @@ suspend inline fun <T> WanResponse<T>.syncBlock(
         blockError?.let {
             it(result)
         }
-        ErrorCodeKts.getCode(result.c)?.let {
+        ErrorHttpKtx.getCode(result.c)?.let {
             it.obj(result.m)
         }
     }

@@ -26,7 +26,7 @@ private suspend fun tryCatch(
             return
         }
         //执行全局报错
-        ErrorCodeKts.invokeError(t)
+        ErrorHttpKtx.invokeError(t)
     } finally {
         finalBlock?.invoke()
     }

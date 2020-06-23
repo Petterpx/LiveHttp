@@ -37,7 +37,7 @@ allprojects {
 
 ```groovy
 dependencies {
-	        implementation 'com.github.people-rmxc:LiveHttp:1.1.1'
+	        implementation 'com.github.people-rmxc:LiveHttp:1.1.2'
 	}
 ```
 
@@ -102,9 +102,34 @@ LiveConfig.log()
 				
 		
 
-						//以下错误逻用于全局处理
-            .errorKtx(101, CodeBean("这是错误码处理逻辑，全局处理") { test() })
+						//以下错误逻用于全局请求码处理,具体处理方式皆处于挂起函数
+            .errorKtx(101, CodeBean("这是错误码处理逻辑，全局处理") {
+              //对于code=101的处理
+            })
             .errorKtx(SparseArray<CodeBean>())  //添加批量错误逻辑处理
+
+						
+						//以下错误用于网络异常处理，具体处理方式皆处于挂起函数
+						.errorHttpKtx(EnumException.NET_DISCONNECT) {
+                Log.e("petterp", "网络断开")
+            }
+            .universalErrorHttpKtx {
+                //便于快速处理常用网络报错
+                Log.e("petterp", "通用网络连接-超时等失败，如网络开启，但网络其实不可用等情况")
+            }
+            .netObserListener(object : INetEnable {
+                override fun netOpen() {
+                    //注意，这里并没有ping,至于网络是否真的可用，没有做处理，如需判断，请在子线程调用。
+                    //框架内部已经处理了网络是否可用的异常，具体查看 ErrorHttpKtx类
+                    // NetObserver.isAvailable() 此方法会去ping
+                    Log.e("petterp", "网络打开")
+                }
+
+                override fun netOff() {
+                    Log.e("petterp", "网络关闭")
+                }
+
+            })
 ```
 
 

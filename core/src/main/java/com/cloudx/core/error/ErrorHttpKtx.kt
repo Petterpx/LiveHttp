@@ -13,13 +13,13 @@ import java.util.concurrent.TimeoutException
  * on 2020-01-14
  * Function: 服务器错误码处理
  */
-object ErrorCodeKts {
+object ErrorHttpKtx {
 
     private val mSparseArray = SparseArray<CodeBean>()
     private val mErrorMap = HashMap<EnumException, suspend () -> Unit>()
 
     /** 保存全局数据响应码 */
-    internal fun putCode(code: Int, codeBean: CodeBean): ErrorCodeKts {
+    internal fun putCode(code: Int, codeBean: CodeBean): ErrorHttpKtx {
         mSparseArray.put(code, codeBean)
         return this
     }

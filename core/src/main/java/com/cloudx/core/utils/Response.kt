@@ -3,7 +3,7 @@
 package com.cloudx.core.utils
 
 import com.cloudx.core.LiveConfig
-import com.cloudx.core.error.ErrorCodeKts
+import com.cloudx.core.error.ErrorHttpKtx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
@@ -28,7 +28,7 @@ inline fun <T> LiveResponse<T>.block(
         success(t)
     } else {
 //        blockError?.let { it(result) }
-//            ?: ErrorCodeKts.getCode(result.c)
+//            ?: ErrorHttpKtx.getCode(result.c)
     }
 }
 

@@ -6,7 +6,7 @@ import android.os.Environment
 import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.EnumException
-import com.cloudx.core.error.ErrorCodeKts
+import com.cloudx.core.error.ErrorHttpKtx
 import com.cloudx.core.interceptor.LiveLog
 import com.cloudx.core.interceptor.RequestInterceptor
 import com.cloudx.core.net.INetEnable
@@ -84,28 +84,38 @@ object LiveConfig {
         return this
     }
 
+    /** 监听网络关闭打开状态 */
     fun netObserListener(listener: INetEnable): LiveConfig {
         NetObserver.iNetEnable = listener
         return this
     }
 
     /** 请求错误码处理 */
-    fun errorKtx(code: Int, codeBean: CodeBean): LiveConfig {
-        ErrorCodeKts.putCode(code, codeBean)
+    fun errorCodeKtx(code: Int, codeBean: CodeBean): LiveConfig {
+        ErrorHttpKtx.putCode(code, codeBean)
         return this
     }
 
     /** 请求错误码处理 */
-    fun errorKtx(sprArray: SparseArray<CodeBean>): LiveConfig {
-        ErrorCodeKts.putCodeAll(sprArray)
+    fun errorCodeKtx(sprArray: SparseArray<CodeBean>): LiveConfig {
+        ErrorHttpKtx.putCodeAll(sprArray)
         return this
     }
 
     /** 网络异常处理 */
-    fun errorAppKtx(vararg enumException: EnumException, obj: suspend () -> Unit): LiveConfig {
+    fun errorHttpKtx(vararg enumException: EnumException, obj: suspend () -> Unit): LiveConfig {
         for (it in enumException) {
-            ErrorCodeKts.putError(it, obj)
+            ErrorHttpKtx.putError(it, obj)
         }
+        return this
+    }
+
+    /** 通用网络处理,非网络断开情况下*/
+    fun universalErrorHttpKtx(obj: suspend () -> Unit): LiveConfig {
+        ErrorHttpKtx.putError(EnumException.CONNECT_EXCEPTION, obj)
+        ErrorHttpKtx.putError(EnumException.TIMEOUT_EXCEPTION, obj)
+        ErrorHttpKtx.putError(EnumException.SOCKET_EXCEPTION, obj)
+        ErrorHttpKtx.putError(EnumException.NET_UNAVAILABLE, obj)
         return this
     }
 

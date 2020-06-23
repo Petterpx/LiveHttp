@@ -2,15 +2,10 @@ package com.cloudx.livehttp
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
-import com.cloudx.core.interceptor.LogInterceptor
 import com.cloudx.core.LiveConfig
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.EnumException
 import com.cloudx.core.net.INetEnable
-import com.cloudx.core.net.NetObserver
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * Created by Petterp

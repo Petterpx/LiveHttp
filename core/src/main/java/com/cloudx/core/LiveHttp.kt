@@ -5,7 +5,6 @@ import com.cloudx.core.interceptor.CacheInterceptor
 import com.cloudx.core.interceptor.RequestInterceptor
 import okhttp3.*
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList

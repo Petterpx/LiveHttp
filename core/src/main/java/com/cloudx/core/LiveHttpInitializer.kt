@@ -2,8 +2,6 @@ package com.cloudx.core
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.cloudx.core.LiveConfig
-import com.cloudx.core.LiveHttp
 import com.cloudx.core.net.NetObserver
 
 /**

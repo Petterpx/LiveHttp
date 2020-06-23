@@ -2,7 +2,6 @@ package com.cloudx.core
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Environment
 import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.EnumException
@@ -12,10 +11,8 @@ import com.cloudx.core.interceptor.RequestInterceptor
 import com.cloudx.core.net.INetEnable
 import com.cloudx.core.net.NetObserver
 import com.google.gson.Gson
-import kotlinx.coroutines.coroutineScope
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import java.io.File
 
 /**
  * Created by Petterp

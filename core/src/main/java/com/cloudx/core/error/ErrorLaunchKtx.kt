@@ -1,6 +1,5 @@
 package com.cloudx.core.error
 
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext

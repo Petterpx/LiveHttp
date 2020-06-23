@@ -1,10 +1,8 @@
 package com.cloudx.core.error
 
+import android.util.Log
 import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -12,18 +10,25 @@ import kotlin.coroutines.CoroutineContext
  * //参考自掘金
  */
 private suspend fun tryCatch(
-    catchBlock: suspend (e: Throwable) -> Unit,
-    finalBlock: suspend () -> Unit,
-    tryBlock: suspend CoroutineScope.() -> Unit
+    finalBlock: (suspend () -> Unit)? = null,
+    errorBlock: (suspend (e: Throwable) -> Unit)? = null
+    , tryBlock: suspend CoroutineScope.() -> Unit
+
 ) {
     try {
         coroutineScope {
             tryBlock()
         }
-    } catch (e: Throwable) {
-        catchBlock(e)
+    } catch (t: Throwable) {
+        t.printStackTrace()
+        errorBlock?.let {
+            it(t)
+            return
+        }
+        //执行全局报错
+        ErrorCodeKts.invokeError(t)
     } finally {
-        finalBlock()
+        finalBlock?.invoke()
     }
 }
 
@@ -32,12 +37,12 @@ private suspend fun tryCatch(
  * */
 fun ViewModel.launchVMHttp(
     coroutineContext: CoroutineContext = Dispatchers.IO,
-    finalBlock: suspend () -> Unit = {},
-    errorBlock: suspend (e: Throwable) -> Unit = {},
-    tryBlock: suspend CoroutineScope.() -> Unit
+    finalBlock: (suspend () -> Unit)? = null,
+    errorBlock: (suspend (e: Throwable) -> Unit)? = null
+    , tryBlock: suspend CoroutineScope.() -> Unit
 ) {
     viewModelScope.launch(coroutineContext) {
-        tryCatch(errorBlock, finalBlock, tryBlock)
+        tryCatch(finalBlock, errorBlock, tryBlock)
     }
 }
 
@@ -56,12 +61,12 @@ fun ViewModel.launchVMHttp(
  * */
 fun LifecycleOwner.launchLfHttp(
     context: CoroutineContext = Dispatchers.IO,
-    finalBlock: suspend () -> Unit = {},
-    errorBlock: suspend (e: Throwable) -> Unit = {},
-    tryBlock: suspend CoroutineScope.() -> Unit
+    finalBlock: (suspend () -> Unit)? = null,
+    errorBlock: (suspend (e: Throwable) -> Unit)? = null
+    , tryBlock: suspend CoroutineScope.() -> Unit
 ) {
     lifecycleScope.launch(context) {
-        tryCatch(errorBlock, finalBlock, tryBlock)
+        tryCatch(finalBlock, errorBlock, tryBlock)
     }
 }
 
@@ -98,9 +103,10 @@ fun LifecycleOwner.launchLfHttp(
  *   }
  */
 suspend fun launchHttp(
-    finalBlock: suspend () -> Unit = {},
-    errorBlock: suspend (e: Throwable) -> Unit = {},
-    tryBlock: suspend CoroutineScope.() -> Unit
+    finalBlock: (suspend () -> Unit)? = null,
+    errorBlock: (suspend (e: Throwable) -> Unit)? = null
+    , tryBlock: suspend CoroutineScope.() -> Unit
+
 ) {
-    tryCatch(errorBlock, finalBlock, tryBlock)
+    tryCatch(finalBlock, errorBlock, tryBlock)
 }

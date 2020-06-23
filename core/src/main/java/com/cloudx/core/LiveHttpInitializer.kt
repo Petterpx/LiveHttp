@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.startup.Initializer
 import com.cloudx.core.LiveConfig
 import com.cloudx.core.LiveHttp
+import com.cloudx.core.net.NetObserver
 
 /**
  * @Author petterp
@@ -14,6 +15,7 @@ import com.cloudx.core.LiveHttp
 class LiveHttpInitializer : Initializer<LiveConfig> {
     override fun create(context: Context): LiveConfig {
         LiveConfig.initContext(context)
+        NetObserver.init(context)
         return LiveConfig
     }
 

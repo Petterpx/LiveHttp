@@ -3,8 +3,6 @@ package com.cloudx.livehttp
 import com.cloudx.core.error.launchHttp
 import kotlinx.coroutines.*
 import java.lang.RuntimeException
-import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 /**
  * @Author petterp

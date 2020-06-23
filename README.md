@@ -104,7 +104,7 @@ LiveConfig.log()
                 //默认为发起网络请求的线程，一般为io,记得调用withContext()
                 //对于code=101的处理
             })
-						//.errorCodeKtx(SparseArray<CodeBean>())  //添加批量错误逻辑处理
+	    //.errorCodeKtx(SparseArray<CodeBean>())  //添加批量错误逻辑处理
 
 
             //以下错误用于网络异常处理，具体处理方式皆处于挂起函数
@@ -128,7 +128,7 @@ LiveConfig.log()
                 }
 
             })
-						//需导入log依赖
+	    //需导入log依赖
             .log()
 ```
 

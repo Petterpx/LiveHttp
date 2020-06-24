@@ -37,7 +37,7 @@ object ErrorHttpKtx {
         mErrorMap[enumException] = obj
     }
 
-    internal suspend fun invokeError(t: Throwable) {
+    suspend fun invokeError(t: Throwable) {
         //先判断网络是否关闭
         if (!NetObserver.isNetEnable()) {
             mErrorMap[EnumException.NET_DISCONNECT]?.invoke()

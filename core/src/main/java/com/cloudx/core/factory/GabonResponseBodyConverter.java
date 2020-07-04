@@ -31,10 +31,6 @@ public class GabonResponseBodyConverter<T> implements Converter<ResponseBody, T>
         if (mType == String.class || mType.getClass().isPrimitive()) {
             return (T) response;
         }
-        Type bodyType = getParameterUpperBound((ParameterizedType) mType);
-        if (bodyType == String.class || bodyType.getClass().isPrimitive()) {
-            return (T) response;
-        }
         return gson.fromJson(response, mType);
     }
 

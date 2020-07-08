@@ -6,11 +6,12 @@ import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.EnumException
 import com.cloudx.core.error.ErrorHttpKtx
+import com.cloudx.core.factory.NullStringToEmptyAdapterFactory
 import com.cloudx.core.interceptor.LiveLog
 import com.cloudx.core.interceptor.RequestInterceptor
 import com.cloudx.core.net.INetEnable
 import com.cloudx.core.net.NetObserver
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
@@ -29,7 +30,8 @@ object LiveConfig {
         var mConnectTimeout = 15L
         lateinit var mBaseUrl: String
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
-        val mGson = Gson()
+        val mGson =
+            GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory()).create()
         val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
 
         @SuppressLint("NewApi")

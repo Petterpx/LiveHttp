@@ -6,10 +6,7 @@ import android.util.SparseArray
 import com.cloudx.core.error.CodeBean
 import com.cloudx.core.error.EnumException
 import com.cloudx.core.error.ErrorHttpKtx
-import com.cloudx.core.factory.BIGDECIMAL
-import com.cloudx.core.factory.INTEGER
 import com.cloudx.core.factory.NullStringToEmptyAdapterFactory
-import com.cloudx.core.factory.STRING
 import com.cloudx.core.interceptor.LiveLog
 import com.cloudx.core.interceptor.RequestInterceptor
 import com.cloudx.core.net.INetEnable

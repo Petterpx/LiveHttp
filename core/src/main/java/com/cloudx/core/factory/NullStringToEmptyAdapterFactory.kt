@@ -14,9 +14,13 @@ import com.google.gson.reflect.TypeToken
  */
 class NullStringToEmptyAdapterFactory : TypeAdapterFactory {
     override fun <T> create(gson: Gson?, type: TypeToken<T>): TypeAdapter<T>? {
-        val rawType = type.rawType as Class<T>
-        return if (rawType != String::class.java) {
-            null
-        } else StringAdapter() as TypeAdapter<T>
+        return when (type.rawType) {
+            String::class.java -> StringAdapter() as TypeAdapter<T>
+            Int::class.java -> IntegerAdapter() as TypeAdapter<T>
+            Long::class.java -> LongAdapter() as TypeAdapter<T>
+            Boolean::class.java -> BooleanAdapter() as TypeAdapter<T>
+            Double::class.java -> DoubleAdapter() as TypeAdapter<T>
+            else -> null
+        }
     }
 }

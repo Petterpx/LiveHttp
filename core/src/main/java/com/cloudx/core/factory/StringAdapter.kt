@@ -32,3 +32,84 @@ internal class StringAdapter : TypeAdapter<String?>() {
         return `in`.nextString()
     }
 }
+
+internal class IntegerAdapter : TypeAdapter<Int?>() {
+    @Throws(IOException::class)
+    override fun write(out: JsonWriter, value: Int?) {
+        if (value == null) {
+            out.nullValue()
+            return
+        }
+        out.value(value)
+    }
+
+    @Throws(IOException::class)
+    override fun read(`in`: JsonReader): Int {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return 0
+        }
+        return `in`.nextInt()
+    }
+}
+
+internal class LongAdapter : TypeAdapter<Long?>() {
+    @Throws(IOException::class)
+    override fun write(out: JsonWriter, value: Long?) {
+        if (value == null) {
+            out.nullValue()
+            return
+        }
+        out.value(value)
+    }
+
+    @Throws(IOException::class)
+    override fun read(`in`: JsonReader): Long {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return 0L
+        }
+        return `in`.nextLong()
+    }
+}
+
+internal class BooleanAdapter : TypeAdapter<Boolean?>() {
+    @Throws(IOException::class)
+    override fun write(out: JsonWriter, value: Boolean?) {
+        if (value == null) {
+            out.nullValue()
+            return
+        }
+        out.value(value)
+    }
+
+    @Throws(IOException::class)
+    override fun read(`in`: JsonReader): Boolean {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return false
+        }
+        return `in`.nextBoolean()
+    }
+}
+
+
+internal class DoubleAdapter : TypeAdapter<Double?>() {
+    @Throws(IOException::class)
+    override fun write(out: JsonWriter, value: Double?) {
+        if (value == null) {
+            out.nullValue()
+            return
+        }
+        out.value(value)
+    }
+
+    @Throws(IOException::class)
+    override fun read(`in`: JsonReader): Double {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return 0.0
+        }
+        return `in`.nextDouble()
+    }
+}

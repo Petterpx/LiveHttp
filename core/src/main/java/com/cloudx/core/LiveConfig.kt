@@ -32,17 +32,11 @@ object LiveConfig {
         var mConnectTimeout = 15L
         lateinit var mBaseUrl: String
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
-        val mGson: Gson
+        val mGson: Gson=GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory()).serializeNulls().create()
         val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
 
         @SuppressLint("NewApi")
         var downloadName = ""
-
-        init {
-            val gsonBuilder = GsonBuilder()
-            gsonBuilder.registerTypeAdapterFactory(NullStringToEmptyAdapterFactory())
-            mGson = gsonBuilder.serializeNulls().create()
-        }
     }
 
 

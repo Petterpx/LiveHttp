@@ -1,4 +1,5 @@
 # LiveHttp
+[![](https://jitpack.io/v/Petterpx/LiveHttp.svg)](https://jitpack.io/#Petterpx/LiveHttp)
 
 ### 基于 Retrofit+Coroutines 的网络请求组件。
 

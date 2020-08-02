@@ -27,13 +27,11 @@ object LiveHttp {
         val liveConfig = LiveConfig.config
         val interceptorList: ArrayList<Interceptor> = liveConfig.mInterceptorList
 
-        //默认关闭网络缓存
         if (liveConfig.mIsCache) {
             builder.addInterceptor(CacheInterceptor())
                 .addNetworkInterceptor(RequestInterceptor())
                 .cache(Cache(liveConfig.mContext.cacheDir, 20 * 1024 * 1024))
         }
-        //添加拦截器
         for (interceptor in interceptorList) {
             builder.addInterceptor(interceptor)
         }
@@ -76,6 +74,4 @@ object LiveHttp {
             .build()
         return retrofit.create(clazz)
     }
-
-
 }

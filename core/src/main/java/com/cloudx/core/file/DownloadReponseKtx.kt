@@ -10,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import com.cloudx.core.LiveConfig
+import com.cloudx.core.interceptor.LiveLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -131,7 +132,7 @@ object DownloadResponseKtx {
                 }
             }
         } catch (e: Exception) {
-            Log.e("liveHttp", e.message.toString())
+            LiveLog.d("liveHttp", e.message.toString())
         } finally {
             os.close()
             ios.close()

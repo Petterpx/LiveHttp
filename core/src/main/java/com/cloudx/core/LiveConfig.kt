@@ -15,7 +15,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import java.math.BigDecimal
 
 /**
  * Created by Petterp
@@ -32,7 +31,9 @@ object LiveConfig {
         var mConnectTimeout = 15L
         lateinit var mBaseUrl: String
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
-        val mGson: Gson=GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory()).serializeNulls().create()
+        val mGson: Gson =
+            GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory())
+                .serializeNulls().create()
         val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
 
         @SuppressLint("NewApi")
@@ -41,14 +42,18 @@ object LiveConfig {
 
 
     /** 用于 Start-APP 初始化，默认会初始化存储路径 */
-    internal fun initContext(context: Context) {
-        config.mContext = context
-        config.downloadName = context.packageName
+    internal fun initStartContext(context: Context) {
+        initContext(context)
     }
 
     fun log(): LiveConfig {
         LiveLog.init()
         return this
+    }
+
+    fun initContext(context: Context) {
+        config.mContext = context
+        config.downloadName = context.packageName
     }
 
 
@@ -119,6 +124,7 @@ object LiveConfig {
         return this
     }
 
+    /** 文件下载路径 */
     fun filePath(path: String): LiveConfig {
         config.downloadName = path
         return this

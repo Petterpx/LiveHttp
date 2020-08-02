@@ -37,7 +37,7 @@ allprojects {
 
 ```groovy
 dependencies {
-	        implementation 'com.github.people-rmxc:LiveHttp:1.1.7'
+	        implementation 'com.github.people-rmxc:LiveHttp:1.0'
 	}
 ```
 

@@ -1,4 +1,4 @@
-package com.cloudx.core.utils
+package com.cloudx.core.net
 
 import android.content.Context
 import android.net.ConnectivityManager

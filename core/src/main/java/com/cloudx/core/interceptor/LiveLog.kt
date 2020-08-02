@@ -9,7 +9,7 @@ import com.orhanobut.logger.Logger
  * @Email ShiyihuiCloud@163.com
  * @Function Ktx-Log-Logger
  */
-internal object LiveLog {
+object LiveLog {
     private const val VERBOSE = 1
     private const val DEBUG = 2
     private const val INFO = 3

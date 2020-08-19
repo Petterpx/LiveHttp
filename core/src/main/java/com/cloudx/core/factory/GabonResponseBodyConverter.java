@@ -1,7 +1,6 @@
 package com.cloudx.core.factory;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -34,6 +33,7 @@ public class GabonResponseBodyConverter<T> implements Converter<ResponseBody, T>
         }
         return gson.fromJson(response, mType);
     }
+
 
     private static Type getParameterUpperBound(ParameterizedType type) {
         Type[] types = type.getActualTypeArguments();

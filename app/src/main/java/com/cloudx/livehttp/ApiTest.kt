@@ -1,6 +1,6 @@
 package com.cloudx.livehttp
 
-import retrofit2.http.GET
+import retrofit2.http.*
 
 /**
  * @Author petterp
@@ -8,6 +8,8 @@ import retrofit2.http.GET
  * @Email ShiyihuiCloud@163.com
  * @Function
  */
+
+
 interface ApiTest {
     @GET("https://www.baidu.com/")
     suspend fun getBaiDu(): String

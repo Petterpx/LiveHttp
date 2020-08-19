@@ -2,7 +2,7 @@
 
 ### 基于 Retrofit+Coroutines 的网络请求组件。
 
-> 网络请求一直是我们开发中比较重的组件，但通常我们对他的使用也仅限于一些普通的使用，如果你厌烦了过重的网络框架，那么LiveHttp将是一个比较好的选择，代码简洁易看懂，如果对你有所帮助，不妨点个star。
+> 网络请求一直是我们开发中必不可少的组件，但通常我们往往用不到太重的组件，如果你厌烦了过重的网络框架，那么LiveHttp将是一个比较好的选择，代码简洁易看懂，通过组件简化开发难度，如果对你有所帮助，不妨点个star。
 
 ### 
 
@@ -13,7 +13,8 @@
 - 简洁的文件上传下载，已适配至Android10，使用Flow返回进度；
 - 完善的异常处理机制，支持全局异常处理，单独处理，业务单独处理；
 - 全局全局自定义错误配置，或者使用默认配置；
-- 支持ktx扩展；
+- 支持网络状态监听；
+- ktx扩展...；
 
 
 
@@ -37,25 +38,19 @@ allprojects {
 
 ```groovy
 dependencies {
-	        implementation 'com.github.people-rmxc:LiveHttp:1.1.7'
+	        implementation 'com.github.petterpx:LiveHttp:core:1.0.1'
 	}
 ```
 
-### 初始化LiveHttp
 
-```kotlin
-无需初始化了，已加入JetPack-startup组件，自动注入了context
-```
 
 ### 自行导入以下组件：
 
 ```groovy
- implementation 'com.squareup.retrofit2:retrofit:2.7.2'
- implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
- implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
- implementation "com.squareup.okhttp3:logging-interceptor:4.3.0"
- implementation "androidx.startup:startup-runtime:1.0.0-alpha01"
- implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5"
+implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+implementation 'com.google.code.gson:gson:2.8.6'
+implementation "com.squareup.okhttp3:logging-interceptor:4.3.0"
+implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8"
 ```
 
 #### 如果需要LiveHttp对于ViewModel-ktx或者Lifecycle-Ktx的扩展，请加入
@@ -92,44 +87,42 @@ LiveConfig.log()
 #### 想定义更多参数？
 
 ```kotlin
- LiveConfig
-            .baseUrl("你的baseUrl")   //baseUrl
+LiveConfig
+            .context(this)
+            .baseUrl("https://www.baidu.com")   //baseUrl
             .writeTimeout(30L)     //设置读写超时时间，默认30l
             .connectTimeout(10L)  //设置连接超时时间,默认10l
             .isCache(true)     //开启网络缓存，默认关闭
             .filePath("xxx")    //文件下载路径
-                
-            //以下错误逻用于全局请求码处理,具体处理方式皆处于挂起函数
+            .log()   //需要导入 logger 依赖
+            .initNetObser()        //监听网络,必须在context之后
+            .initNetObser(object : INetEnable {
+                override fun netOpen() {
+                    //网络打开
+                }
+
+                override fun netOff() {
+                    //网络关闭
+                }
+
+            })
+            //以下错误逻用于全局请求码处理,具体处理域皆处于挂起函数
             .errorCodeKtx(101, CodeBean {
                 //默认为发起网络请求的线程，一般为io,记得调用withContext()
                 //对于code=101的处理
             })
-	    //.errorCodeKtx(SparseArray<CodeBean>())  //添加批量错误逻辑处理
-
-
-            //以下错误用于网络异常处理，具体处理方式皆处于挂起函数
+            //通用网络处理方案
+            .universalErrorHttpKtx {
+                //EnumException.CONNECT_EXCEPTION
+                //EnumException.TIMEOUT_EXCEPTION
+                //EnumException.SOCKET_EXCEPTION,
+                //EnumException.NET_UNAVAILABLE, 
+                Log.e("petterp", "通用网络连接-超时等失败，如网络开启，但网络其实不可用等情况")
+            }
+            //以下错误用于指定网络异常处理，具体处理域皆处于挂起函数
             .errorHttpKtx(EnumException.NET_DISCONNECT) {
                 Log.e("petterp", "网络断开")
             }
-            .universalErrorHttpKtx {
-                //便于快速处理常用网络报错
-                Log.e("petterp", "通用网络连接-超时等失败，如网络开启，但网络其实不可用等情况")
-            }
-            .netObserListener(object : INetEnable {
-                override fun netOpen() {
-                    //注意，这里并没有ping,至于网络是否真的可用，没有做处理，如需判断，请在子线程调用。
-                    //框架内部已经处理了网络是否可用的异常，具体查看 ErrorHttpKtx类
-                    // NetObserver.isAvailable() 此方法会去ping
-                    Log.e("petterp", "网络打开")
-                }
-
-                override fun netOff() {
-                    Log.e("petterp", "网络关闭")
-                }
-
-            })
-	    //需导入log依赖
-            .log()
 ```
 
 

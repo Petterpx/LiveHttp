@@ -4,6 +4,7 @@ import android.util.SparseArray
 import androidx.core.util.putAll
 import com.cloudx.core.net.NetObserver
 import com.google.gson.JsonParseException
+import org.json.JSONException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeoutException
@@ -47,7 +48,7 @@ object ErrorHttpKtx {
         val error = when (t) {
             is ConnectException -> EnumException.CONNECT_EXCEPTION
             is SocketTimeoutException -> EnumException.SOCKET_EXCEPTION
-            is JsonParseException -> EnumException.JSON_EXCEPTION
+            is JSONException -> EnumException.JSON_EXCEPTION
             is TimeoutException -> EnumException.TIMEOUT_EXCEPTION
             else -> EnumException.NO_KNOW_EXCEPTION
         }

@@ -5,78 +5,133 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import okio.IOException
-import java.math.BigDecimal
 
 
 /**
  * @Author petterp
- * @Date 2020/7/11-6:38 AM
+ * @Date 2020/7/8-12:09 PM
  * @Email ShiyihuiCloud@163.com
- * @Function
+ * @Function null值处理器
  */
-//自定义String适配器
-internal val STRING: TypeAdapter<*>? = object : TypeAdapter<Any?>() {
+internal class StringAdapter : TypeAdapter<String?>() {
     @Throws(IOException::class)
-    override fun write(jsonWriter: JsonWriter, o: Any?) {
-        if (o == null) {
-            // 在这里处理null改为空字符串
-            jsonWriter.value("")
+    override fun write(out: JsonWriter, value: String?) {
+        if (value == null) {
+            out.nullValue()
             return
         }
-        jsonWriter.value(o.toString())
+        out.value(value)
     }
 
     @Throws(IOException::class)
-    override fun read(reader: JsonReader): String? {
-        if (reader.peek() === JsonToken.NULL) {
-            reader.nextNull()
+    override fun read(`in`: JsonReader): String {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
             return ""
         }
-        return reader.nextString()
+        return `in`.nextString()
     }
 }
 
-//自定义Integer适配器
-internal val INTEGER: TypeAdapter<*> = object : TypeAdapter<Any?>() {
+internal class IntegerAdapter : TypeAdapter<Int?>() {
     @Throws(IOException::class)
-    override fun write(jsonWriter: JsonWriter, o: Any?) {
-        if (o == null) {
-            // 在这里处理null改为0
-            jsonWriter.value(0)
+    override fun write(out: JsonWriter, value: Int?) {
+        if (value == null) {
+            out.nullValue()
             return
         }
-        jsonWriter.value(Integer.valueOf(o.toString()))
+        out.value(value)
     }
 
     @Throws(IOException::class)
-    override fun read(reader: JsonReader): Int? {
-        if (reader.peek() === JsonToken.NULL) {
-            reader.nextNull()
+    override fun read(`in`: JsonReader): Int {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
             return 0
         }
-        return reader.nextInt()
+        return `in`.nextInt()
+    }
+}
+
+internal class LongAdapter : TypeAdapter<Long?>() {
+    @Throws(IOException::class)
+    override fun write(out: JsonWriter, value: Long?) {
+        if (value == null) {
+            out.nullValue()
+            return
+        }
+        out.value(value)
+    }
+
+    @Throws(IOException::class)
+    override fun read(`in`: JsonReader): Long {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return 0L
+        }
+        return `in`.nextLong()
+    }
+}
+
+internal class FloatAdapter : TypeAdapter<Float?>() {
+    @Throws(IOException::class)
+    override fun write(out: JsonWriter, value: Float?) {
+        if (value == null) {
+            out.nullValue()
+            return
+        }
+        out.value(value)
+    }
+
+    @Throws(IOException::class)
+    override fun read(`in`: JsonReader): Float {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return 0f
+        }
+        return `in`.nextString().toFloat()
     }
 }
 
 
-//自定义BigDecimal适配器
-internal val LONGIMAL: TypeAdapter<*> = object : TypeAdapter<Any?>() {
+
+internal class BooleanAdapter : TypeAdapter<Boolean?>() {
     @Throws(IOException::class)
-    override fun write(jsonWriter: JsonWriter, o: Any?) {
-        if (o == null) {
-            // 在这里处理null改为0
-            jsonWriter.value(BigDecimal("0"))
+    override fun write(out: JsonWriter, value: Boolean?) {
+        if (value == null) {
+            out.nullValue()
             return
         }
-        jsonWriter.value(BigDecimal(o.toString()))
+        out.value(value)
     }
 
     @Throws(IOException::class)
-    override fun read(reader: JsonReader): BigDecimal? {
-        if (reader.peek() === JsonToken.NULL) {
-            reader.nextNull()
-            return BigDecimal("0")
+    override fun read(`in`: JsonReader): Boolean {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return false
         }
-        return BigDecimal(reader.nextString())
+        return `in`.nextBoolean()
+    }
+}
+
+
+internal class DoubleAdapter : TypeAdapter<Double?>() {
+    @Throws(IOException::class)
+    override fun write(out: JsonWriter, value: Double?) {
+        if (value == null) {
+            out.nullValue()
+            return
+        }
+        out.value(value)
+    }
+
+    @Throws(IOException::class)
+    override fun read(`in`: JsonReader): Double {
+        if (`in`.peek() === JsonToken.NULL) {
+            `in`.nextNull()
+            return 0.0
+        }
+        return `in`.nextDouble()
     }
 }

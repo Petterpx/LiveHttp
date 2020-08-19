@@ -21,8 +21,11 @@ object NetObserver {
     internal var isNetEnable = false
     private var isNetAvailable = false
     internal var iNetEnable: INetEnable? = null
+    private var isInit = false
 
     internal fun init(context: Context) {
+        if (isInit) return
+        isInit = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val connectivityManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 context.getSystemService(ConnectivityManager::class.java) ?: null

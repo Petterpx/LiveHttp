@@ -15,7 +15,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import java.math.BigDecimal
 
 /**
  * Created by Petterp
@@ -32,7 +31,9 @@ object LiveConfig {
         var mConnectTimeout = 15L
         lateinit var mBaseUrl: String
         var mInterceptorList: ArrayList<Interceptor> = ArrayList(5)
-        val mGson: Gson=GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory()).serializeNulls().create()
+        val mGson: Gson =
+            GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory())
+                .serializeNulls().create()
         val mediaType = "application/json;charset=UTF-8".toMediaTypeOrNull()
 
         @SuppressLint("NewApi")
@@ -42,8 +43,26 @@ object LiveConfig {
 
     /** 用于 Start-APP 初始化，默认会初始化存储路径 */
     internal fun initContext(context: Context) {
+        context(context)
+    }
+
+    /** 此方法必须在context()后执行 */
+    fun initNetObser(): LiveConfig {
+        NetObserver.init(config.mContext)
+        return this
+    }
+
+    /** 监听网络关闭打开状态,此方法必须在context后执行 */
+    fun initNetObser(listener: INetEnable): LiveConfig {
+        NetObserver.init(config.mContext)
+        NetObserver.iNetEnable = listener
+        return this
+    }
+
+    fun context(context: Context): LiveConfig {
         config.mContext = context
         config.downloadName = context.packageName
+        return this
     }
 
     fun log(): LiveConfig {
@@ -84,11 +103,6 @@ object LiveConfig {
         return this
     }
 
-    /** 监听网络关闭打开状态 */
-    fun netObserListener(listener: INetEnable): LiveConfig {
-        NetObserver.iNetEnable = listener
-        return this
-    }
 
     /** 请求错误码处理 */
     fun errorCodeKtx(code: Int, codeBean: CodeBean): LiveConfig {

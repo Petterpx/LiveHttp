@@ -2,16 +2,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cloudx.core">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <application>
-        <provider
-            android:authorities="${applicationId}.androidx-startup"
-            android:name="androidx.startup.InitializationProvider"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="com.cloudx.core.LiveHttpInitializer"
-                android:value="@string/androidx_startup"/>
-        </provider>
 
-    </application>
 </manifest>

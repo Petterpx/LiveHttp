@@ -143,16 +143,17 @@ object DownloadResponseKtx {
  * 带进度的文件下载
  */
 @ExperimentalCoroutinesApi
-suspend inline fun ResponseBody.overSchedule(
+suspend fun ResponseBody.overSchedule(
     downloadFileDow: DownloadFileKtx,
-    crossinline obj: ((Uri) -> Unit) = {}
+    obj: ((Uri) -> Unit) = {}
 ): Flow<Int> {
+    val body = this
     return flow<Int> {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             val saveQ = DownloadResponseKtx.saveQ(
-                this@overSchedule,
+                body,
                 downloadFileDow,
-                DownloadListener(this@overSchedule.contentLength()),
+                DownloadListener(body.contentLength()),
                 this
             )
             withContext(Dispatchers.Main) {
@@ -160,9 +161,9 @@ suspend inline fun ResponseBody.overSchedule(
             }
         } else {
             val saveFile = DownloadResponseKtx.saveFile(
-                this@overSchedule,
+                body,
                 downloadFileDow,
-                DownloadListener(this@overSchedule.contentLength()),
+                DownloadListener(body.contentLength()),
                 this
             )
             withContext(Dispatchers.Main) {
@@ -171,6 +172,7 @@ suspend inline fun ResponseBody.overSchedule(
         }
     }.flowOn(Dispatchers.IO)
 }
+
 
 /**
  * 直接返回uri的文件下载

@@ -18,7 +18,7 @@ class NullStringToEmptyAdapterFactory : TypeAdapterFactory {
             String::class.java -> StringAdapter() as TypeAdapter<T>
             Int::class.java -> IntegerAdapter() as TypeAdapter<T>
             Boolean::class.java -> BooleanAdapter() as TypeAdapter<T>
-            Float::class.java -> FloatAdapter() as TypeAdapter<T>
+//            Float::class.java -> FloatAdapter() as TypeAdapter<T>
             Long::class.java -> LongAdapter() as TypeAdapter<T>
             Double::class.java -> DoubleAdapter() as TypeAdapter<T>
             else -> null

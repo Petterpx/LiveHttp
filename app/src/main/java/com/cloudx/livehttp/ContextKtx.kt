@@ -15,6 +15,7 @@ import com.cloudx.core.net.INetEnable
 class ContextKtx : Application() {
     override fun onCreate() {
         super.onCreate()
+
         LiveConfig
             .context(this)
             .baseUrl("https://www.baidu.com")   //baseUrl

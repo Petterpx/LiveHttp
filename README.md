@@ -1,5 +1,7 @@
 # LiveHttp
 
+[![](https://jitpack.io/v/Petterpx/LiveHttp.svg)](https://jitpack.io/#Petterpx/LiveHttp)
+
 ### 基于 Retrofit+Coroutines 的网络请求组件。
 
 > 网络请求一直是我们开发中必不可少的组件，但通常我们往往用不到太重的组件，如果你厌烦了过重的网络框架，那么LiveHttp将是一个比较好的选择，代码简洁易看懂，通过组件简化开发难度，如果对你有所帮助，不妨点个star。
@@ -38,7 +40,7 @@ allprojects {
 
 ```groovy
 dependencies {
-	        implementation 'com.github.petterpx:LiveHttp:core:1.0.1'
+	        implementation 'com.github.Petterpx:LiveHttp:1.0.1'
 	}
 ```
 

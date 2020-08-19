@@ -1,7 +1,7 @@
 package com.cloudx.core.interceptor
 
 import com.cloudx.core.LiveConfig
-import com.cloudx.core.utils.isNetworkConnected
+import com.cloudx.core.net.isNetworkConnected
 import okhttp3.Interceptor
 import okhttp3.Response
 
